@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -23,22 +24,23 @@ public class Application {
 
         Queue<Integer> queue = new ConcurrentLinkedQueue<>(); //Los generics no soportan tipos primitivos
                                                                      //ConcurrentLinkeDeque es una implementacion de Queue
-
+        int queue_elems = 1000;
+        int desired_elems = 100;
         //NumberConsumer t = new NumberConsumer(queue);
 
         //Ahora hacerlo para N number consumers
         //Lo voy a hacer para 4
         ArrayList<NumberConsumer> threads = new ArrayList<>();
 
-        AtomicInteger counter = new AtomicInteger(1000);
+        AtomicInteger elems = new AtomicInteger(desired_elems);
 
         for(int i =0; i<4; i++)
-            threads.add(new NumberConsumer(queue, counter)); //instancio cada thread
+            threads.add(new NumberConsumer(queue, elems)); //instancio cada thread
 
         for(int i =0; i<4; i++)
             threads.get(i).start(); //arranca la ejecucion de cada thread
 
-        for (int i=0; i<1000; i++)
+        for (int i=0; i<queue_elems; i++)
         {
             queue.add(i); //agrego los items a la queue
             //el add si no tiene suficiente capacidad devuelve una excepcion (tiene implementado un throws)
