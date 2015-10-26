@@ -20,6 +20,7 @@ public class Application {
      */
     public static void main(String args[])
     {
+        int elems = 1000; //cantidad de elementos en la queue y cant de elementos a imprimir con threads
 
         Queue<Integer> queue = new ConcurrentLinkedQueue<>(); //Los generics no soportan tipos primitivos
                                                                      //ConcurrentLinkeDeque es una implementacion de Queue
@@ -30,7 +31,7 @@ public class Application {
         //Lo voy a hacer para 4
         ArrayList<NumberConsumer> threads = new ArrayList<>();
 
-        AtomicInteger counter = new AtomicInteger(1000);
+        AtomicInteger counter = new AtomicInteger(elems);
 
         for(int i =0; i<4; i++)
             threads.add(new NumberConsumer(queue, counter)); //instancio cada thread
@@ -38,7 +39,7 @@ public class Application {
         for(int i =0; i<4; i++)
             threads.get(i).start(); //arranca la ejecucion de cada thread
 
-        for (int i=0; i<1000; i++)
+        for (int i=0; i<elems; i++)
         {
             queue.add(i); //agrego los items a la queue
             //el add si no tiene suficiente capacidad devuelve una excepcion (tiene implementado un throws)
@@ -53,6 +54,6 @@ public class Application {
         } catch(InterruptedException e){
             System.out.println(e.getMessage());
         }
-
+        System.out.println("termino");
     }
 }
